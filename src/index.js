@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import API from '../src/fetchCountries'
 import './css/styles.css';
@@ -12,7 +12,7 @@ const refs = {
 };
 
 let valueCountry = "";
-refs.input.addEventListener('input', debounce(onSearchCountry, DEBOUNCE_DELAY));
+refs.input.addEventListener('input', onSearchCountry);
 
 function onSearchCountry(valueCountry) {
     valueCountry = refs.input.value.trim();
