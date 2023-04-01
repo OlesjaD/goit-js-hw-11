@@ -19,68 +19,56 @@ refs.btnLoadMore.addEventListener('click', onLoadSearch);
 
 function onSearchQuery(e) {
     e.preventDefault();
+
+    clearValueSearch();
     newsApiService.valueSearchQuery = e.currentTarget.elements.searchQuery.value;
+    if(newsApiService.query === '') {
+        Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
+        return;
+    }
     newsApiService.resetPage();
-    newsApiService.fetchSearchQuery().then(hits => console.log(hits));
-
-
-
-    // valueSearchQuery = refs.input.value.trim();
-    // console.log(valueSearchQuery);
-    // API.fetchSearchQuery(valueSearchQuery)
-    // .then(countries => {
-    //     console.log(countries)
-        // if (this.valueSearchQuery === 0) {
-    //         clearValueCountries(); 
-            // Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");}
-
-
-//         else if (countries.length >= 2 && countries.length <= 10) { clearValueCountries(); renderCountriesList(countries);}
-//         else if (countries.length === 1) {
-//             clearValueCountries();
-//             renderCountryInfo(countries);
-//         }     
-//         else {clearValueCountries();  onFetchError();}
-    // })
-    // .catch(error =>console.log(error));
+    newsApiService.fetchSearchQuery().then(renderQueryList);
 }
 
 function onLoadSearch() {
-    newsApiService.fetchSearchQuery().then(hits => console.log(hits));
+    newsApiService.fetchSearchQuery().then(renderQueryList);
 }
 
-// function renderCountriesList(countries) {
-//     const markupList = countries
-//         .map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
-//             return `
-//                 <div class="photo-card">
-//                 <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-//                 <div class="info">
-//                     <p class="info-item">
-//                     <b>Likes: ${likes}</b>
-//                     </p>
-//                     <p class="info-item">
-//                     <b>Views: ${views}</b>
-//                     </p>
-//                     <p class="info-item">
-//                     <b>Comments: ${comments}</b>
-//                     </p>
-//                     <p class="info-item">
-//                     <b>Downloads: ${downloads}</b>
-//                     </p>
-//                 </div>
-//                 </div>
-//             `;
-//         }).join("");
-//     refs.list.insertAdjacentHTML('beforeend', markupList);
-// }
+function renderQueryList(hits) {
+    const markupList = hits
+        .map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
+            return `
+                <div class="photo-card">
+                    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+                    <div class="info">
+                        <p class="info-item">
+                        <b>Likes: ${likes}</b>
+                        </p>
+                        <p class="info-item">
+                        <b>Views: ${views}</b>
+                        </p>
+                        <p class="info-item">
+                        <b>Comments: ${comments}</b>
+                        </p>
+                        <p class="info-item">
+                        <b>Downloads: ${downloads}</b>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    refs.gallery.insertAdjacentHTML('beforeend', markupList);
 
+    // refs.gallery.addEventListener('click', onGalleryClick);
 
+    // function onGalleryClick (e) {
+    // if (e.target.nodeName !== 'IMG') {
+    //     return;
+    // }
+    // var lightbox = new SimpleLightbox('.gallery a', {captionsData: '${largeImageURL}', captionDelay: 250,});
+    // }
+}
 
-// function onFetchError() {
-//     Notiflix.Notify.failure("Oops, there is no country with that name");
-// }
-// function clearValueCountries() {
-//     refs.list.innerHTML = "";
-//     refs.info.innerHTML = "";
-// }
+function clearValueSearch() {
+    refs.gallery.innerHTML = "";
+}
