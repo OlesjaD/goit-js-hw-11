@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import API from './searchQuery'
+import NewsApiService from './searchQuery'
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import './css/styles.css';
@@ -7,26 +7,21 @@ import './css/styles.css';
 const refs = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('.country-field'),
-    btn: document.querySelector('.country-btn'),
+    btnSubmit: document.querySelector('.country-btn'),
     gallery: document.querySelector('.gallery'),
+    btnLoadMore: document.querySelector('.load-more'),
 };
 
-// let valueSearchQuery = "";
+const newsApiService = new NewsApiService();
+
 refs.form.addEventListener('submit', onSearchQuery);
+refs.btnLoadMore.addEventListener('click', onLoadSearch);
 
 function onSearchQuery(e) {
     e.preventDefault();
-    let valueSearchQuery = e.currentTarget.elements.searchQuery.value;
-
-    const API_KEY = '34940882-efdc958859e9672f0dbeb2fd7';
-    const URL = "https://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent;
-
-    
-    fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${valueSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true`)
-    .then(response => response.json())
-    .then(console.log)
-
-
+    newsApiService.valueSearchQuery = e.currentTarget.elements.searchQuery.value;
+    newsApiService.resetPage();
+    newsApiService.fetchSearchQuery().then(hits => console.log(hits));
 
 
 
@@ -35,9 +30,9 @@ function onSearchQuery(e) {
     // API.fetchSearchQuery(valueSearchQuery)
     // .then(countries => {
     //     console.log(countries)
-    //     if (valueSearchQuery === 0) {
+        // if (this.valueSearchQuery === 0) {
     //         clearValueCountries(); 
-    //         Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");}
+            // Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");}
 
 
 //         else if (countries.length >= 2 && countries.length <= 10) { clearValueCountries(); renderCountriesList(countries);}
@@ -48,6 +43,10 @@ function onSearchQuery(e) {
 //         else {clearValueCountries();  onFetchError();}
     // })
     // .catch(error =>console.log(error));
+}
+
+function onLoadSearch() {
+    newsApiService.fetchSearchQuery().then(hits => console.log(hits));
 }
 
 // function renderCountriesList(countries) {
