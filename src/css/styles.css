@@ -34,3 +34,9 @@ body {
   color: #040846;
   background-color: rgb(255, 249, 249);
 }
+
+.load-more {
+  color: rgb(255, 249, 249);
+  background-color: #0b1489;
+  border-radius: 4px;
+}

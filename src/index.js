@@ -11,78 +11,77 @@ const refs = {
     gallery: document.querySelector('.gallery'),
 };
 
-let valueCountry = "";
+// let valueSearchQuery = "";
 refs.form.addEventListener('submit', onSearchQuery);
 
-function onSearchQuery(valueCountry) {
-    valueCountry = refs.input.value.trim();
-    console.log(valueCountry);
-    API.fetchCountries(valueCountry)
-    .then(countries => {
-        console.log(countries)
-        if (valueCountry === 0) {
-            clearValueCountries(); 
-            Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");}
+function onSearchQuery(e) {
+    e.preventDefault();
+    let valueSearchQuery = e.currentTarget.elements.searchQuery.value;
 
+    const API_KEY = '34940882-efdc958859e9672f0dbeb2fd7';
+    const URL = "https://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent;
 
-        else if (countries.length >= 2 && countries.length <= 10) { clearValueCountries(); renderCountriesList(countries);}
-        else if (countries.length === 1) {
-            clearValueCountries();
-            renderCountryInfo(countries);
-        }     
-        else {clearValueCountries();  onFetchError();}
-    })
-    .catch(error =>console.log(error));
-}
-
-function renderCountriesList(countries) {
-    const markupList = countries
-        .map(({name, flags}) => {
-            return `
-                <div class="photo-card">
-                <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-                <div class="info">
-                    <p class="info-item">
-                    <b>Likes</b>
-                    </p>
-                    <p class="info-item">
-                    <b>Views</b>
-                    </p>
-                    <p class="info-item">
-                    <b>Comments</b>
-                    </p>
-                    <p class="info-item">
-                    <b>Downloads</b>
-                    </p>
-                </div>
-                </div>
-            `;
-        }).join("");
-    refs.list.insertAdjacentHTML('beforeend', markupList);
-}
-
-function renderCountryInfo(countries) {
-    const markupInfo = countries 
-        .map(({name, capital, population, flags, languages}) => {
-            return `
-                <div class="country-info__details">
-                <img src="${flags.svg}" alt="flags counrty" width=240px height=140px/>
-                <h2>${name.official}</h2>
-                
-                <p>Capital: ${capital}</p>
-                <p>Population: ${population}</p>
-                <p>Languages: ${Object.values(languages)}</p>
-                </div>
-            `;
-        }).join("");
     
-        refs.info.insertAdjacentHTML('beforeend', markupInfo);
+    fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${valueSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true`)
+    .then(response => response.json())
+    .then(console.log)
+
+
+
+
+
+    // valueSearchQuery = refs.input.value.trim();
+    // console.log(valueSearchQuery);
+    // API.fetchSearchQuery(valueSearchQuery)
+    // .then(countries => {
+    //     console.log(countries)
+    //     if (valueSearchQuery === 0) {
+    //         clearValueCountries(); 
+    //         Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");}
+
+
+//         else if (countries.length >= 2 && countries.length <= 10) { clearValueCountries(); renderCountriesList(countries);}
+//         else if (countries.length === 1) {
+//             clearValueCountries();
+//             renderCountryInfo(countries);
+//         }     
+//         else {clearValueCountries();  onFetchError();}
+    // })
+    // .catch(error =>console.log(error));
 }
 
-function onFetchError() {
-    Notiflix.Notify.failure("Oops, there is no country with that name");
-}
-function clearValueCountries() {
-    refs.list.innerHTML = "";
-    refs.info.innerHTML = "";
-}
+// function renderCountriesList(countries) {
+//     const markupList = countries
+//         .map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
+//             return `
+//                 <div class="photo-card">
+//                 <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+//                 <div class="info">
+//                     <p class="info-item">
+//                     <b>Likes: ${likes}</b>
+//                     </p>
+//                     <p class="info-item">
+//                     <b>Views: ${views}</b>
+//                     </p>
+//                     <p class="info-item">
+//                     <b>Comments: ${comments}</b>
+//                     </p>
+//                     <p class="info-item">
+//                     <b>Downloads: ${downloads}</b>
+//                     </p>
+//                 </div>
+//                 </div>
+//             `;
+//         }).join("");
+//     refs.list.insertAdjacentHTML('beforeend', markupList);
+// }
+
+
+
+// function onFetchError() {
+//     Notiflix.Notify.failure("Oops, there is no country with that name");
+// }
+// function clearValueCountries() {
+//     refs.list.innerHTML = "";
+//     refs.info.innerHTML = "";
+// }
