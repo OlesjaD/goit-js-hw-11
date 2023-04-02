@@ -29,8 +29,6 @@ export default class NewsApiService {
     }
 }
 
-// function fetchSearchQuery(valueSearchQuery) {
-//    return fetch(`${BASE_URL}/?key="+API_KEY+"&q="+${valueSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true`)
 //     .then(response => { if(!response.ok) {
 //         return []}
 //     return response.json()}).catch(error => console.log("ERROR!"))
