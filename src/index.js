@@ -1,7 +1,5 @@
 import Notiflix from 'notiflix';
-import NewsApiService from './searchQuery'
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import NewsApiService from './searchQuery';
 import './css/styles.css';
 
 const refs = {
@@ -18,9 +16,9 @@ const newsApiService = new NewsApiService();
 refs.form.addEventListener('submit', onSearchQuery);
 refs.btnLoadMore.addEventListener('click', onLoadSearch);
 
-function onSearchQuery(e) {
+async function onSearchQuery(e) {
     e.preventDefault();
-
+    
     clearValueSearch();
     newsApiService.valueSearchQuery = e.currentTarget.elements.searchQuery.value.trim();
     if(newsApiService.query === '') {
@@ -30,12 +28,25 @@ function onSearchQuery(e) {
     newsApiService.resetPage();
     newsApiService.query !== '';
     hideLoadBtn();
-    onLoadSearch();
+    const {hits, total} = newsApiService;
+    await newsApiService.fetchSearchQuery();
+    renderQueryList(hits);
+    showLoadBtn();
+    console.log(hits.length);
+    if (hits.length < total) {
+        Notify.success(`Hooray! We found ${total} images !!!`);
+        showLoadBtn();
+      }
+    
+      if (hits.length >= total) {
+        Notify.info("We're sorry, but you've reached the end of search results.");
+      }
 }
 
 function onLoadSearch() {
-    newsApiService.fetchSearchQuery().then(renderQueryList);
+     newsApiService.fetchSearchQuery().then(renderQueryList);
     showLoadBtn();
+    ;
 }
 
 function renderQueryList(hits) {
@@ -60,17 +71,8 @@ function renderQueryList(hits) {
                     </div>
                 </div>
             `;
-        }).join("");
+        }).join('');
     refs.gallery.insertAdjacentHTML('beforeend', markupList);
-
-    // refs.gallery.addEventListener('click', onGalleryClick);
-
-    // function onGalleryClick (e) {
-    // if (e.target.nodeName !== 'IMG') {
-    //     return;
-    // }
-    // 
-    // }
 }
 
 function clearValueSearch() {
