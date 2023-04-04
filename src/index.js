@@ -41,18 +41,17 @@ async function onSearchQuery(e) {
 
 function onLoadSearch() {
      newsApiService.fetchSearchQuery()
-     .then(({hits, total}) => {
-        if (hits.length >= total) {
-            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-            hideLoadBtn();
-          }
-     renderQueryList(hits);
-     showLoadBtn();
-    })
-     .catch(error => {
-        console.error(error);
-    });
-    ;
+        .then(({hits}) => {
+            renderQueryList(hits);
+            showLoadBtn();
+            if (hits.length === 0) {
+                Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+                hideLoadBtn();
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 function renderQueryList(hits) {
