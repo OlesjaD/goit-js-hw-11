@@ -33,11 +33,11 @@ async function onSearchQuery(e) {
 
     renderQueryList(hits);
     showLoadBtn();
-    console.log(hits.length);
-    if (hits.length < total) {
-        Notiflix.Notify.success(`Hooray! We found ${total} images !!!`);
-        showLoadBtn();
-      }
+    // console.log(hits.length);
+    // if (hits.length < total) {
+    //     Notiflix.Notify.success(`Hooray! We found ${total} images !!!`);
+    //     showLoadBtn();
+    //   }
     
       if (hits.length >= total) {
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
@@ -46,8 +46,12 @@ async function onSearchQuery(e) {
 
 function onLoadSearch() {
      newsApiService.fetchSearchQuery()
+     .then(({hits}) => {
      renderQueryList(hits);
-    showLoadBtn();
+     showLoadBtn();})
+     .catch(error => {
+        console.error(error);
+    });
     ;
 }
 
