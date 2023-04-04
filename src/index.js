@@ -28,27 +28,27 @@ async function onSearchQuery(e) {
     newsApiService.resetPage();
     newsApiService.query !== '';
     hideLoadBtn();
-    // await newsApiService.fetchSearchQuery();
     const {hits, total} = await newsApiService.fetchSearchQuery();
 
     renderQueryList(hits);
     showLoadBtn();
-    // console.log(hits.length);
-    // if (hits.length < total) {
-    //     Notiflix.Notify.success(`Hooray! We found ${total} images !!!`);
-    //     showLoadBtn();
-    //   }
     
       if (hits.length >= total) {
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        hideLoadBtn();
       }
 }
 
 function onLoadSearch() {
      newsApiService.fetchSearchQuery()
-     .then(({hits}) => {
+     .then(({hits, total}) => {
+        if (hits.length >= total) {
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+            hideLoadBtn();
+          }
      renderQueryList(hits);
-     showLoadBtn();})
+     showLoadBtn();
+    })
      .catch(error => {
         console.error(error);
     });
