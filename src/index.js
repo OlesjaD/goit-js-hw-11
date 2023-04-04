@@ -28,8 +28,8 @@ async function onSearchQuery(e) {
     newsApiService.resetPage();
     newsApiService.query !== '';
     hideLoadBtn();
-    await newsApiService.fetchSearchQuery();
-    const {hits, total} = data;
+    // await newsApiService.fetchSearchQuery();
+    const {hits, total} = await newsApiService.fetchSearchQuery();
 
     renderQueryList(hits);
     showLoadBtn();
@@ -45,7 +45,8 @@ async function onSearchQuery(e) {
 }
 
 function onLoadSearch() {
-     newsApiService.fetchSearchQuery().then(renderQueryList);
+     newsApiService.fetchSearchQuery()
+     renderQueryList(hits);
     showLoadBtn();
     ;
 }
