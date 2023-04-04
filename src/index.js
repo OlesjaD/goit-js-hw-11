@@ -28,18 +28,19 @@ async function onSearchQuery(e) {
     newsApiService.resetPage();
     newsApiService.query !== '';
     hideLoadBtn();
-    const {hits, total} = newsApiService;
     await newsApiService.fetchSearchQuery();
+    const {hits, total} = data;
+
     renderQueryList(hits);
     showLoadBtn();
     console.log(hits.length);
     if (hits.length < total) {
-        Notify.success(`Hooray! We found ${total} images !!!`);
+        Notiflix.Notify.success(`Hooray! We found ${total} images !!!`);
         showLoadBtn();
       }
     
       if (hits.length >= total) {
-        Notify.info("We're sorry, but you've reached the end of search results.");
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
       }
 }
 
